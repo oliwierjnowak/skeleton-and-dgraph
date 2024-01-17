@@ -1,9 +1,38 @@
-<script lang="ts">
+<script lang="ts" context="module">
 	import Post from "../components/post.svelte";
+    import { request, gql } from "graphql-request";
 
-	let a : number[] = [1,2,3,4,5,6,7];
+const query = gql`
+  {
+    countries {
+      name
+      emoji
+    }
+  }
+`;
+
+export const load = async () => {
+  const data = await request("https://countries.trevorblades.com/", query);
+  return {
+    props: {
+      data,
+    },
+  };
+};
+	
 
 </script>
+
+<script >
+	let a  = [1,2,3,4,5,6,7];
+	export let data =  load ;
+
+	console.log(data)
+</script>
+  
+  <!-- {JSON.stringify(data)} -->
+  
+
 
 
 <div class="container h-3/6 mx-auto flex">
