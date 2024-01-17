@@ -15,15 +15,17 @@ query allUsers {
         }
       }
 }`;
-
+export interface User{
+    color: string;
+    email: string;
+    id: string;
+    name: string;
+    tweets: Tweet[];
+}
 
 export interface AllUsersData  {
     queryUser: {
-      color: string;
-      email: string;
-      id: string;
-      name: string;
-      tweets: Tweet[];
+      users: User[];
     };
   }
   
