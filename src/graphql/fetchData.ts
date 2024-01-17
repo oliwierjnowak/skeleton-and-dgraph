@@ -1,7 +1,14 @@
 import { request, gql } from 'graphql-request';
-
+import grpc from "@grpc/grpc-js"
+import dgraph from 'dgraph-js'
 // Define the GraphQL query
-const query = gql`
+
+const clientStub = dgraph.clientStubFromCloudEndpoint(
+  "https://nameless-brook-560043.eu-central-1.aws.cloud.dgraph.io/graphql",
+  "MDQ4MTgxYTg4NzExZjMwYzg4MDJiNjI2MjUzZmY3Mjc="
+);
+const dgraphClient = new dgraph.DgraphClient(clientStub);
+const query = `
 query allUsers {
      queryUser {
         color
@@ -15,6 +22,29 @@ query allUsers {
         }
       }
 }`;
+
+
+
+export const getAllUsers = async (): Promise<any> => {
+  const query1 = `
+  query allUsers {
+       queryUser {
+          color
+          email
+          id
+          name
+          tweets {
+              id
+              likes
+              content
+          }
+        }
+  }`;
+  const res = dgraphClient.newTxn().query(query1)
+  const json = (await res).getJson()
+  return json
+}
+
 export interface User{
     color: string;
     email: string;
@@ -35,10 +65,10 @@ export interface AllUsersData  {
     content: string;
   }
 // Function to fetch data
-export const fetchData = async (): Promise<AllUsersData> => {
+export const fetchData = async (): Promise<any> => {
   try {
     // Execute the GraphQL query using the request function
-    const data = await request<AllUsersData>("https://nameless-brook-560043.eu-central-1.aws.cloud.dgraph.io/graphql", query);
+    const data = await request("https://nameless-brook-560043.eu-central-1.aws.cloud.dgraph.io/graphql", query);
     return data;
   } catch (error) {
     // Handle errors

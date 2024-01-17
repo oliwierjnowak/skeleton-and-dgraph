@@ -13,7 +13,7 @@
 	
 //	type AllQuery = { users: user[]}
 	let fetched : any = null; 
-	let userData: AllUsersData
+	let userData :any
 	let loaded = false
 
 	onMount(async () => {
