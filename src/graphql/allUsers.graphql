@@ -1,0 +1,13 @@
+query allUsers {
+     queryUser {
+        color
+        email
+        id
+        name
+        tweets {
+            id
+            likes
+            content
+        }
+      }
+}
