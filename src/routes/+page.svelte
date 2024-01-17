@@ -14,12 +14,14 @@
 //	type AllQuery = { users: user[]}
 	let fetched : any = null; 
 	let userData: AllUsersData
-
+	let loaded = false
 
 	onMount(async () => {
     try {
 		userData = await fetchData();
 		console.log(userData)
+		loaded = true
+		
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -31,7 +33,12 @@
 </script>
 
 
+{#if loaded == true}
+	<p>true</p>
 
+{:else}
+	<p>false</p>
+{/if}
 
 
 <div class="container h-3/6 mx-auto flex">
