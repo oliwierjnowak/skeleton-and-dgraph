@@ -16,33 +16,43 @@
 		try {
 			userData = await fetchData() ;
 			usernames = userData.queryUser.map(x => x.name)
-		
-		/*	 flavorOptions = userData.queryUser.map(user => ({
-					label: user.name,      
-					value: user.id,        
-					keywords: user.email,  
-					meta: { healthy: false }
-				}));*/
-
-			
-	
+				
 			loaded = true;
 		} catch (error) {
 		console.error('Error fetching data:', error);
 		}
   });
+
+  let content = '';
 	let a = [1,2,3,4,5]
 
 	let valueSingle: string ;
 	function showSelected(){
 		console.log(valueSingle)
 	}
+	const handleUpload = () => {
+    // Handle the upload logic here
+    console.log('Content:', content);
+    // You can send the content to the server or perform any other action.
+  };
 </script>
 
 <div class="container h-3/6 mx-auto flex">
 	<div class="columns-sm flex-1 bg-blue-500 p-4 space-y-10 text-center items-center">
-	  <!-- Content for the first container -->
-	  First Container
+		{#if loaded == true && valueSingle}
+			<form on:submit|preventDefault={handleUpload}>
+
+				<label for="content" class="label">
+					<span>Send tweet</span>
+					<textarea   bind:value={content} id="content" class="textarea" rows="4" placeholder="new tweet" />
+				</label>
+				
+			<button type="submit">Upload</button>
+			</form>
+		{:else}
+			<span>no user selected</span>
+		{/if}
+
 	</div>
   
 	<div class="columns-lg flex-4 p-10 space-y-10 text-center flex flex-col items-center">
