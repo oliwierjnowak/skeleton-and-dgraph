@@ -1,36 +1,37 @@
-<script context="module" lang="ts">
-	import { fetchData}  from '../graphql/fetchData';
-	import type {AllUsersData, Tweet } from '../graphql/fetchData';
-</script>
-
-
-<script lang="ts" >
+<script lang="ts" context="module">
 	import Post from "../components/post.svelte";
     import { request, gql } from "graphql-request";
-	import { onMount } from "svelte";
-	
-	
-	
-//	type AllQuery = { users: user[]}
-	let fetched : any = null; 
-	let userData: AllUsersData
 
-
-	onMount(async () => {
-    try {
-		userData = await fetchData();
-		console.log(userData)
-    } catch (error) {
-      console.error('Error fetching data:', error);
+const query = gql`
+  {
+    countries {
+      name
+      emoji
     }
-  });
-	let a = [1,2,3,4,5]
+  }
+`;
+
+export const load = async () => {
+  const data = await request("https://countries.trevorblades.com/", query);
+  return {
+    props: {
+      data,
+    },
+  };
+};
 	
 
-	 
 </script>
 
+<script >
+	let a  = [1,2,3,4,5,6,7];
+	export let data =  load ;
 
+	console.log(data)
+</script>
+  
+  <!-- {JSON.stringify(data)} -->
+  
 
 
 

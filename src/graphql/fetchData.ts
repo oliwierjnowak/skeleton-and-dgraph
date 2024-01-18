@@ -1,6 +1,4 @@
 import { request, gql } from 'graphql-request';
-import grpc from "@grpc/grpc-js"
-import dgraph from 'dgraph-js'
 // Define the GraphQL query
 
 const clientStub = dgraph.clientStubFromCloudEndpoint(
