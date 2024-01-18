@@ -32,7 +32,7 @@
 </script>
 
 <div class="container h-3/6 mx-auto flex">
-	<div class="columns-sm flex-1 bg-blue-500 p-4 space-y-10 text-center items-center">
+	<div class="columns-sm flex-1  p-4 space-y-10 text-center items-center">
 		{#if loaded == true && selectedID}
 			<Send userID={selectedID}/>
 		{:else}
@@ -47,8 +47,6 @@
 		</div>
 
 		{#if loaded == true}
-			<p>true</p>
-			<h1>{userData.queryUser[0].name}</h1>
 			{#each userData.queryUser as user }
 
 			<Post {user} />
