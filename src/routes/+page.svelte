@@ -25,7 +25,6 @@
 	let a = [1,2,3,4,5]
 	
 
-	 
 </script>
 
 <div class="container h-3/6 mx-auto flex">

@@ -1,29 +1,18 @@
 import { request, gql } from 'graphql-request';
-
 // Define the GraphQL query
-const query = gql`
-query allUsers {
-     queryUser {
-        color
-        email
-        id
-        name
-        tweets {
-            id
-            likes
-            content
-        }
-      }
-}`;
 
+
+export interface User{
+    color: string;
+    email: string;
+    id: string;
+    name: string;
+    tweets: Tweet[];
+}
 
 export interface AllUsersData  {
     queryUser: {
-      color: string;
-      email: string;
-      id: string;
-      name: string;
-      tweets: Tweet[];
+      users: User[];
     };
   }
   
