@@ -1,16 +1,20 @@
 <script lang="ts">
-    import {AddNewTweet} from '../graphql/fetchData'
+    import {AddNewTweet, type random} from '../graphql/fetchData'
     let content = '';
 
 	export let userID: string;
+    export let reloadTweets :() => Promise<void>; 
     let posting :boolean = false
 	const handleUpload = async () => {
         posting = true
+        await reloadTweets;
         const request = await AddNewTweet(userID,content);
         if(request){
             content = ''
         }
-        posting =false;
+        await reloadTweets();
+       
+      
     };
 
 

@@ -13,6 +13,7 @@
 		await DeleteTweet(user.id,tweet);
 		
 	}
+
 </script>
 
 

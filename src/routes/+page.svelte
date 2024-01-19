@@ -1,10 +1,9 @@
-<script context="module" lang="ts">
-	import { fetchData}  from '../graphql/fetchData';
-	import type {random, user, tweet } from '../graphql/fetchData';
-</script>
+
 
 
 <script lang="ts" >
+	import { fetchData}  from '../graphql/fetchData';
+	import type {random, user, tweet } from '../graphql/fetchData';
 	import Post from "../components/post.svelte";
 	import { onMount } from "svelte";
 	import Send from "../components/send.svelte";
@@ -16,11 +15,13 @@
 		{ color: 'rgb(var(--color-primary-500))', start: 75, end: 100 }
 	];
 	
-	
-	let userData: random
+	let posted : boolean = false;
+	export let userData: random
 	let loaded  =false;
 	let usernames: string[]
 	onMount(async () => {
+		
+		
 		try {
 			userData = await fetchData() ;
 			usernames = userData.queryUser.map(x => x.name)
@@ -30,6 +31,13 @@
 		console.error('Error fetching data:', error);
 		}
   	});
+
+	export let reloadTweets = async () => {
+		loaded = false;
+		userData = await fetchData() ;
+		loaded = true;  
+		console.log('hello')
+	}
 
 
 	let a = [1,2,3,4,5]
@@ -43,7 +51,7 @@
 	
 	<div class="columns-sm  flex-1 p-10 space-y-10 text-center items-center">
 		{#if loaded == true && selectedID}
-			<Send userID={selectedID}/>
+			<Send userID={selectedID} bind:reloadTweets={reloadTweets}/>
 		{:else}
 			<span>no user selected</span>
 		{/if}
