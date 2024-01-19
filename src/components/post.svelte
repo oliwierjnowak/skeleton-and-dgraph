@@ -2,9 +2,7 @@
 	import type {random, user, tweet } from '../graphql/fetchData';
 	import  {DeleteTweet } from '../graphql/fetchData';
 	export let user: user;
-	let tweets = user.tweets
-	export let style :string
-	console.log(style)
+	let tweets = user.tweets.sort((a,b) => b.id.localeCompare( a.id));
 	async function deleteTweet(tweet: string,contetn:string) {
 
 		console.log(tweet + "   " + contetn  )
@@ -13,8 +11,7 @@
 		await DeleteTweet(user.id,tweet);
 		
 	}
-
-</script>
+</script>	
 
 
 
@@ -22,10 +19,9 @@
 
     
 	{#each tweets as x }	
-		
 			<div class="card p-4 card-hover p-4 w-80">
 				<div >
-					<div class="{style} rounded p-4 w-full content-center">
+					<div style="background-color: {user.color.toLowerCase()};" class="{"bg-"+user.color.toLowerCase()+"-500"} rounded p-4 w-full content-center">
 						<h2>{x.content}</h2>
 					  </div>
 				

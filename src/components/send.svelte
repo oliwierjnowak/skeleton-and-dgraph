@@ -31,7 +31,7 @@
 <!-- svelte-ignore empty-block -->
 {#if posting == true }
     <ConicGradient stops={stopsSpinner} spin width="w-8">
-        <p class="text-token">Loading</p>
+      
     </ConicGradient>
 {:else}
     <form on:submit|preventDefault={handleUpload}>

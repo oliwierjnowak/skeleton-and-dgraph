@@ -66,14 +66,14 @@
 		{#if loaded == true}
 			{#each userData.queryUser as user }
 			
-					<Post user={user} style={'bg-'+user.color.toLowerCase()+'-400'}  />
+					<Post user={user}   />
 				
 		
 			
 			{/each}	
 		{:else}
 			<ConicGradient stops={stopsSpinner} spin width="w-8">
-				<p class="text-token">Loading</p>
+				
 			</ConicGradient>
 		{/if}
 
@@ -89,7 +89,7 @@
 				
 		{:else}
 			<ConicGradient stops={stopsSpinner} spin width="w-8">
-				<p class="text-token">Loading</p>
+				
 			</ConicGradient>
 		{/if}
 
