@@ -108,23 +108,21 @@ export async function DeleteTweet(user:string,tweet: string): Promise<boolean>{
   };
   
   const requestBody = {
-    query: `mutation deleteTweet($filter: TweetFilter!) {
-      deleteTweet(filter: $filter) {
+    query: `mutation MyMutation($id: [ID!]) {
+      deleteTweet(filter: {id: $id}) {
         msg
-         tweet{
+        numUids
+        tweet {
           id
-          content
           likes
+          content
         }
       }
     }`,
     variables: {
-      patch: {
-        filter: {
-          id: [tweet]
-        }
+      id: tweet
       }
-    }
+    
   };
   const requestNodeChild = await fetch("https://nameless-brook-560043.eu-central-1.aws.cloud.dgraph.io/graphql", {
     method: 'POST',
