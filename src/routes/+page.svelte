@@ -58,7 +58,7 @@
 		{#if loaded == true}
 			{#each userData.queryUser as user }
 			
-					<Post {user} />
+					<Post user={user} style={'bg-'+user.color.toLowerCase()+'-400'}  />
 				
 		
 			
