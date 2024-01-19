@@ -16,21 +16,6 @@ query allUsers {
       }
 }`;
 
-const queryPost = `
-query allUsers {
-     queryUser {
-        color
-        email
-        id
-        name
-        tweets {
-            id
-            likes
-            content
-        }
-      }
-}`;
-
 export type random = {
   queryUser: user[]
 }
@@ -59,10 +44,6 @@ export const fetchData = async (): Promise<random> => {
   }
 };
 
-export const postData = async () => {
-  const data = await request<random>("https://nameless-brook-560043.eu-central-1.aws.cloud.dgraph.io/graphql", queryPost);
-  return data
-}
 
 
 
@@ -101,6 +82,59 @@ export async function AddNewTweet(userid: string, content:string) : Promise<bool
   };
  
    const request = await fetch("https://nameless-brook-560043.eu-central-1.aws.cloud.dgraph.io/graphql", {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(requestBody),
+  })
+  return true
+}
+
+
+export async function DeleteTweet(user:string,tweet: string): Promise<boolean>{
+  const removeNode = {
+    query: `
+      mutation MyMutation($userId: [ID!], $tweetId: ID!) {
+        updateUser(input: {filter: {id: $userId}, remove: {tweets: {id: $tweetId}}}) {
+          numUids
+        }
+      }
+    `,
+    variables: {
+      userId: user, 
+      tweetId: tweet 
+    }
+  };
+  
+  const requestBody = {
+    query: `mutation deleteTweet($filter: TweetFilter!) {
+      deleteTweet(filter: $filter) {
+        msg
+         tweet{
+          id
+          content
+          likes
+        }
+      }
+    }`,
+    variables: {
+      patch: {
+        filter: {
+          id: [tweet]
+        }
+      }
+    }
+  };
+  const requestNodeChild = await fetch("https://nameless-brook-560043.eu-central-1.aws.cloud.dgraph.io/graphql", {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(removeNode),
+  })
+
+  const request = await fetch("https://nameless-brook-560043.eu-central-1.aws.cloud.dgraph.io/graphql", {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

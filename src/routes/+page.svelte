@@ -9,6 +9,14 @@
 	import { onMount } from "svelte";
 	import Send from "../components/send.svelte";
 	import TweeterUsers from '../components/list.svelte'
+	import { ConicGradient, type ConicStop } from '@skeletonlabs/skeleton';
+	
+	const stopsSpinner: ConicStop[] = [
+		{ color: 'transparent', start: 0, end: 25 },
+		{ color: 'rgb(var(--color-primary-500))', start: 75, end: 100 }
+	];
+	
+	
 	let userData: random
 	let loaded  =false;
 	let usernames: string[]
@@ -32,7 +40,8 @@
 </script>
 
 <div class="container h-3/6 mx-auto flex">
-	<div class="columns-sm flex-1  p-4 space-y-10 text-center items-center">
+	
+	<div class="columns-sm  flex-1 p-10 space-y-10 text-center items-center">
 		{#if loaded == true && selectedID}
 			<Send userID={selectedID}/>
 		{:else}
@@ -41,32 +50,39 @@
 
 	</div>
   
-	<div class="columns-lg flex-4 p-10 space-y-10 text-center flex flex-col items-center">
+	<div class=" columns-lg flex-4 p-10 space-y-10 text-center flex flex-col items-center">
 		<div class="bg-blue-900 rounded p-4 w-full md:w-2/3 lg:w-4/6 xl:w-4/6">
 			<h1> all posts</h1>
 		</div>
 
 		{#if loaded == true}
 			{#each userData.queryUser as user }
-
-			<Post {user} />
+			
+					<Post {user} />
+				
+		
+			
 			{/each}	
 		{:else}
-			<p>false</p>
+			<ConicGradient stops={stopsSpinner} spin width="w-8">
+				<p class="text-token">Loading</p>
+			</ConicGradient>
 		{/if}
 
-		
+			
 
 	</div>
   
-	<div class="columns-sm flex-1 bg-blue-500 p-4 space-y-10 text-center items-center">
+	<div class="columns-sm flex-1  p-4 space-y-10 text-center items-center">
 	  <!-- Content for the third container -->
 
 		{#if loaded == true}
 			<TweeterUsers bind:users={userData} bind:selectionUserID={selectedID}/>
 				
 		{:else}
-			<p>false</p>
+			<ConicGradient stops={stopsSpinner} spin width="w-8">
+				<p class="text-token">Loading</p>
+			</ConicGradient>
 		{/if}
 
 	</div>
