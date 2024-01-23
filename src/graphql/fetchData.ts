@@ -1,44 +1,72 @@
-import { request, gql } from 'graphql-request';
-// Define the GraphQL query
+import { request } from 'graphql-request';
 
 const query = `
-query allUsers {
-     queryUser {
-        color
-        email
-        id
-        name
-        tweets {
-            id
-            likes
-            content
-        }
-      }
+query MyQuery {
+  queryDirector {
+    age
+    gender
+    id
+    name
+    movie {
+      id
+      name
+      rating
+      description
+    }
+  }
 }`;
 
-export type random = {
-  queryUser: user[]
+
+export type DqlData = {
+  queryDirector: Director[]
 }
-export type user = {
-  color : string,
-  email : string,
+export type Director = {
   id: string,
   name: string,
-  tweets : tweet []
+  age: number,
+  gender: string,
+  movie : Movie []
 }
-export type tweet = {
+export type Movie = {
   id : string,
-  likes: number,
-  content: string
+  name: string,
+  rating: number,
+  description: string,
 }
 
-export const fetchData = async (): Promise<random> => {
+export const fetchData = async (): Promise<DqlData> => {
   try {
-    // Execute the GraphQL query using the request function
-    const data = await request<random>("https://nameless-brook-560043.eu-central-1.aws.cloud.dgraph.io/graphql", query);
+    const data = await request<DqlData>("https://nameless-brook-560057.eu-central-1.aws.cloud.dgraph.io/graphql", query);
     return data;
   } catch (error) {
-    // Handle errors
+    console.error('GraphQL error:', error);
+    throw error;
+  }
+};
+
+export type DqlSingleData = {
+  getDirector: movieSingle
+}
+export type movieSingle = {
+   "movie": Movie[]
+}
+
+export const fetchSingleData = async (id: string): Promise<DqlSingleData> => {
+  try {
+    const data = await request<DqlSingleData>("https://nameless-brook-560057.eu-central-1.aws.cloud.dgraph.io/graphql", `
+    query MyQuery {
+      getDirector(id: "${id}") {
+        movie {
+          id
+          name
+          rating
+          description
+        }
+      }
+    }`);
+  
+    return data;
+  } catch (error) {
     console.error('GraphQL error:', error);
     throw error;
   }
@@ -46,98 +74,3 @@ export const fetchData = async (): Promise<random> => {
 
 
 
-
-export async function AddNewTweet(userid: string, content:string) : Promise<boolean>{
-
-
-  const requestBody = {
-    query: `mutation updateUser($patch: UpdateUserInput!) {
-      updateUser(input: $patch) {
-        user {
-          id
-          name
-          email
-          color
-          tweets {
-            id
-            content
-            likes
-          }
-        }
-      }
-    }`,
-    variables: {
-      patch: {
-        filter: {
-          id: [userid]
-        },
-        set: {
-          tweets: {
-            content: content,
-            likes: 0
-          }
-        }
-      }
-    }
-  };
- 
-   const request = await fetch("https://nameless-brook-560043.eu-central-1.aws.cloud.dgraph.io/graphql", {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(requestBody),
-  })
-  return true
-}
-
-
-export async function DeleteTweet(user:string,tweet: string): Promise<boolean>{
-  const removeNode = {
-    query: `
-      mutation MyMutation($userId: [ID!], $tweetId: ID!) {
-        updateUser(input: {filter: {id: $userId}, remove: {tweets: {id: $tweetId}}}) {
-          numUids
-        }
-      }
-    `,
-    variables: {
-      userId: user, 
-      tweetId: tweet 
-    }
-  };
-  
-  const requestBody = {
-    query: `mutation MyMutation($id: [ID!]) {
-      deleteTweet(filter: {id: $id}) {
-        msg
-        numUids
-        tweet {
-          id
-          likes
-          content
-        }
-      }
-    }`,
-    variables: {
-      id: tweet
-      }
-    
-  };
-  const requestNodeChild = await fetch("https://nameless-brook-560043.eu-central-1.aws.cloud.dgraph.io/graphql", {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(removeNode),
-  })
-
-  const request = await fetch("https://nameless-brook-560043.eu-central-1.aws.cloud.dgraph.io/graphql", {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(requestBody),
-  })
-  return true
-}
