@@ -2,40 +2,42 @@ import { request, gql } from 'graphql-request';
 // Define the GraphQL query
 
 const query = `
-query allUsers {
-     queryUser {
-        color
-        email
-        id
-        name
-        tweets {
-            id
-            likes
-            content
-        }
-      }
-}`;
-
-export type random = {
-  queryUser: user[]
+query MyQuery {
+  queryTweet {
+    id
+    likes
+    content
+    creator {
+      name
+      id
+      email
+      color
+    }
+  }
 }
-export type user = {
-  color : string,
-  email : string,
-  id: string,
-  name: string,
-  tweets : tweet []
+`;
+
+export type FrontPageState = {
+  queryTweet: tweet[]
 }
 export type tweet = {
+  likes : number,
+  content: string,
+  id: string,
+  name: string,
+  creator : [user] 
+}
+export type user = {
   id : string,
-  likes: number,
-  content: string
+  color: string,
+  email: string,
+  name: string
 }
 
-export const fetchData = async (): Promise<random> => {
+export const fetchData = async (): Promise<FrontPageState> => {
   try {
     // Execute the GraphQL query using the request function
-    const data = await request<random>("https://nameless-brook-560043.eu-central-1.aws.cloud.dgraph.io/graphql", query);
+    const data = await request<FrontPageState>("https://nameless-brook-560043.eu-central-1.aws.cloud.dgraph.io/graphql", query);
     return data;
   } catch (error) {
     // Handle errors
@@ -141,3 +143,53 @@ export async function DeleteTweet(user:string,tweet: string): Promise<boolean>{
   })
   return true
 }
+
+/*
+
+
+mutation MyMutation {
+  updateTweet(input: {
+		filter: {
+			id: "0x1a5243a688"
+			}, 
+		set: {
+			childtweets: {
+				content: "AddChildTest",
+				owner: {
+					id: "0x1a5243a688"
+					}, 
+				likes: 15,
+				creator: {
+					id: "0x1a50d28a75"
+					}
+				}
+			}
+		}
+	) {
+    numUids
+  }
+}
+
+
+*/
+
+/*
+
+ratel query
+{
+  MyQuery(func: type(Tweet)) {
+    uid
+    Tweet.likes
+    Tweet.content
+    Tweet.creator {
+			User.email
+    }
+    Tweet.childtweets {
+      Tweet.content
+      uid
+      Tweet.likes
+    }
+  }
+}
+
+*/ 

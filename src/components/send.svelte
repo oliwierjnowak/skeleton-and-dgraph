@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {AddNewTweet, type random} from '../graphql/fetchData'
+    import {AddNewTweet, type FrontPageState} from '../graphql/fetchData'
     let content = '';
 
 	export let userID: string;

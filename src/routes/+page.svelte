@@ -3,43 +3,52 @@
 
 <script lang="ts" >
 	import { fetchData}  from '../graphql/fetchData';
-	import type {random, user, tweet } from '../graphql/fetchData';
-	import Post from "../components/post.svelte";
+	import type {FrontPageState, user, tweet } from '../graphql/fetchData';
+	import TweetComponent from "../components/tweetComponent.svelte";
 	import { onMount } from "svelte";
 	import Send from "../components/send.svelte";
 	import TweeterUsers from '../components/list.svelte'
 	import { ConicGradient, type ConicStop } from '@skeletonlabs/skeleton';
-	
+
 	const stopsSpinner: ConicStop[] = [
 		{ color: 'transparent', start: 0, end: 25 },
 		{ color: 'rgb(var(--color-primary-500))', start: 75, end: 100 }
 	];
 	
 	let posted : boolean = false;
-	export let userData: random
+	export let FrontState: FrontPageState
+
 	let loaded  =false;
 	let usernames: string[]
 	onMount(async () => {
 		
 		
 		try {
-			userData = await fetchData() ;
-			usernames = userData.queryUser.map(x => x.name)
-				
+			FrontState = await fetchData() ;
+			console.log(FrontState.queryTweet);
+		//	let users = userData.tweetDatweets		//	usernames = users[0].map(x => x.name)
 			loaded = true;
 		} catch (error) {
 		console.error('Error fetching data:', error);
 		}
   	});
 
+	  let state : FrontPageState = {queryTweet:[]};
 	export let reloadTweets = async () => {
 		loaded = false;
-		userData = await fetchData() ;
+		FrontState = await fetchData() ;
+	 
+		 state = FrontState
 		loaded = true;  
 		console.log('hello')
 	}
 
-
+	let user : user = {
+		color:"",
+		email:"",
+		id:"",
+		name:""
+	};
 	let a = [1,2,3,4,5]
 
 	let selectedID: string ;
@@ -50,8 +59,7 @@
 <div class="container h-3/6 mx-auto flex">
 	
 	<div class="columns-sm  flex-1 p-10 space-y-10 text-center items-center">
-		{#if loaded == true && selectedID}
-			<Send userID={selectedID} bind:reloadTweets={reloadTweets}/>
+		{#if loaded == true && selectedID}tweetsnd userID={selectedID} bind:reloadTweets={reloadTweets}/>
 		{:else}
 			<span>no user selected</span>
 		{/if}
@@ -64,9 +72,9 @@
 		</div>
 
 		{#if loaded == true}
-			{#each userData.queryUser as user }
+			{#each FrontState.queryTweet as tweet }
 			
-					<Post user={user}   />
+				<TweetComponent  state={tweet}  />
 				
 		
 			
@@ -83,9 +91,8 @@
   
 	<div class="columns-sm flex-1  p-4 space-y-10 text-center items-center">
 	  <!-- Content for the third container -->
-
 		{#if loaded == true}
-			<TweeterUsers bind:users={userData} bind:selectionUserID={selectedID}/>
+			<TweeterUsers bind:data={state} bind:selectionUserID={selectedID}/>
 				
 		{:else}
 			<ConicGradient stops={stopsSpinner} spin width="w-8">
