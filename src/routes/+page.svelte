@@ -2,13 +2,13 @@
 
 
 <script lang="ts" >
-	import { fetchData}  from '../graphql/fetchData';
+	import { fetchData, fetchTopicData}  from '../graphql/fetchData';
 	import type {FrontPageState, user, tweet } from '../graphql/fetchData';
 	import TweetComponent from "../components/tweetComponent.svelte";
 	import { onMount } from "svelte";
-	import Send from "../components/send.svelte";
 	import TweeterUsers from '../components/list.svelte'
 	import { ConicGradient, type ConicStop } from '@skeletonlabs/skeleton';
+	import Send from '../components/send.svelte';
 
 	const stopsSpinner: ConicStop[] = [
 		{ color: 'transparent', start: 0, end: 25 },
@@ -20,12 +20,15 @@
 
 	let loaded  =false;
 	let usernames: string[]
+	let topics : user[];
 	onMount(async () => {
 		
 		
 		try {
 			FrontState = await fetchData() ;
-			console.log(FrontState.queryTweet);
+
+			topics = await fetchTopicData();
+			
 		//	let users = userData.tweetDatweets		//	usernames = users[0].map(x => x.name)
 			loaded = true;
 		} catch (error) {
@@ -59,7 +62,7 @@
 <div class="container h-3/6 mx-auto flex">
 	
 	<div class="columns-sm  flex-1 p-10 space-y-10 text-center items-center">
-		{#if loaded == true && selectedID}tweetsnd userID={selectedID} bind:reloadTweets={reloadTweets}/>
+		{#if loaded == true && selectedID} <Send  userID={selectedID} bind:reloadTweets={reloadTweets}/>
 		{:else}
 			<span>no user selected</span>
 		{/if}
@@ -73,9 +76,11 @@
 
 		{#if loaded == true}
 			{#each FrontState.queryTweet as tweet }
-			
-				<TweetComponent  state={tweet}  />
+				<a  href="/details/{tweet.id}">
+
+					<TweetComponent  state={tweet}  />
 				
+				</a>
 		
 			
 			{/each}	
@@ -92,7 +97,7 @@
 	<div class="columns-sm flex-1  p-4 space-y-10 text-center items-center">
 	  <!-- Content for the third container -->
 		{#if loaded == true}
-			<TweeterUsers bind:data={state} bind:selectionUserID={selectedID}/>
+			<TweeterUsers bind:data={topics} bind:selectedTopicID={selectedID}/>
 				
 		{:else}
 			<ConicGradient stops={stopsSpinner} spin width="w-8">

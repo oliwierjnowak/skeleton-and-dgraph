@@ -1,21 +1,21 @@
 <script lang="ts">
     import { ListBox, ListBoxItem } from '@skeletonlabs/skeleton';
 	import type {FrontPageState, user, tweet } from '../graphql/fetchData';
-	export let data: FrontPageState
+	export let data: user[]
 
 
-	export let selectionUserID: string = "" ;
+	export let selectedTopicID: string = "" ;
     
-    let users = data.queryTweet.map( x=> x.creator)
+   // let users = data.map( x=> x.creator)
     function showSelected(){
-		console.log(selectionUserID)
+		console.log(selectedTopicID)
 	}
 </script>
 
 <ListBox >
-    {#each users as user }
+    {#each data as user }
 
-        <ListBoxItem bind:group={selectionUserID} name="medium" on:change={showSelected}  value={user[0].id}>{user[0].name}</ListBoxItem>
+        <ListBoxItem bind:group={selectedTopicID} name="medium" on:change={showSelected}  value={user.id}>{user.name}</ListBoxItem>
 
     {/each}	
 

@@ -3,7 +3,7 @@ import { request, gql } from 'graphql-request';
 
 const query = `
 query MyQuery {
-  queryTweet {
+  queryTweet(filter: {not: {has: owner}}) {
     id
     likes
     content
@@ -17,6 +17,17 @@ query MyQuery {
 }
 `;
 
+const topicQuery = `
+query MyQuery {
+  queryUser {
+    id
+    name
+    email
+    color
+  }
+}
+`;
+
 export type FrontPageState = {
   queryTweet: tweet[]
 }
@@ -24,7 +35,7 @@ export type tweet = {
   likes : number,
   content: string,
   id: string,
-  name: string,
+  comments: string,
   creator : [user] 
 }
 export type user = {
@@ -45,10 +56,65 @@ export const fetchData = async (): Promise<FrontPageState> => {
     throw error;
   }
 };
+type UserState= {
+  queryUser: user[]
+}
+export const fetchTopicData = async (): Promise<user[]> => {
+  try {
+    // Execute the GraphQL query using the request function
+    const data = await request<UserState>("https://nameless-brook-560043.eu-central-1.aws.cloud.dgraph.io/graphql", topicQuery);
+    return data.queryUser;
+  } catch (error) {
+    // Handle errors
+    console.error('GraphQL error:', error);
+    throw error;
+  }
+};
 
+ export  const loadOwner = async  (id: string): Promise<ownerTweet>  =>  {
 
-
-
+	var query = `query MyQuery {
+					getTweet(id: "${id}") {
+						likes
+						id
+						content
+						creator {
+						id
+						name
+						color
+						email
+						}
+						childtweets {
+						id
+						likes
+						content
+						childtweetsAggregate {
+							count
+							}	
+						}
+						childtweetsAggregate {
+						count
+						}
+					}
+					}
+					`
+	const data = await request<specificTweet>("https://nameless-brook-560043.eu-central-1.aws.cloud.dgraph.io/graphql", query);
+	//console.log(data.getTweet.childtweets[0].childtweetsAggregate.count)
+  console.log(data.getTweet)
+	return data.getTweet;
+}
+export type specificTweet = {
+	getTweet: ownerTweet
+}
+export type ownerTweet = {
+	likes : number,
+	content: string,
+	id: string,
+	name: string,
+	creator : [user] 
+	childtweetsAggregate? : {count?:number}
+	childtweets : [{content:string,id:string,likes:number,childtweetsAggregate? : {count?:number}}]
+}
 export async function AddNewTweet(userid: string, content:string) : Promise<boolean>{
 
 

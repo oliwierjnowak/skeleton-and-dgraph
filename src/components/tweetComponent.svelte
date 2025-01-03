@@ -13,6 +13,7 @@
 		//await DeleteTweet(user.id,tweet);
 		
 	}
+	console.log(state)
 </script>	
 
 
@@ -29,6 +30,7 @@
 		<!-- svelte-ignore a11y-label-has-associated-control -->
 		<label class="label">
 			<span> {state.creator[0].name}</span>
+			<span> {state.creator[0].email}</span>
 			<span> {state.likes}</span>
 		</label>
 			
