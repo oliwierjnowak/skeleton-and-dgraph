@@ -119,33 +119,21 @@ export async function AddNewTweet(userid: string, content:string) : Promise<bool
 
 
   const requestBody = {
-    query: `mutation updateUser($patch: UpdateUserInput!) {
-      updateUser(input: $patch) {
-        user {
-          id
-          name
-          email
-          color
-          tweets {
-            id
-            content
-            likes
-          }
-        }
-      }
-    }`,
+    query: `mutation MyMutation($content: String, $id: ID ) {
+              addTweet(input: {content: $content, creator: {id: $id}, likes: 0}){
+              tweet {
+                content
+                creator {
+                  id
+                }
+                id
+              }
+              
+              }
+            }`,
     variables: {
-      patch: {
-        filter: {
-          id: [userid]
-        },
-        set: {
-          tweets: {
-            content: content,
-            likes: 0
-          }
-        }
-      }
+      content: content,
+      id: userid
     }
   };
  
