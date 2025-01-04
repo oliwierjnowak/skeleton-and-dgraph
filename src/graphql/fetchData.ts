@@ -115,35 +115,50 @@ export type ownerTweet = {
 	childtweetsAggregate? : {count?:number}
 	childtweets : [{content:string,id:string,likes:number,childtweetsAggregate? : {count?:number}}]
 }
-export async function AddNewTweet(userid: string, content:string) : Promise<boolean>{
+export async function AddNewTweet(childTweet : boolean,userid: string, content:string, topic : string | undefined) : Promise<boolean>{
 
 
-  const requestBody = {
-    query: `mutation MyMutation($content: String, $id: ID ) {
-              addTweet(input: {content: $content, creator: {id: $id}, likes: 0}){
-              tweet {
-                content
-                creator {
+    const requestBody = {
+      query: `mutation MyMutation($content: String, $id: ID ) {
+                addTweet(input: {content: $content, creator: {id: $id}, likes: 0}){
+                tweet {
+                  content
+                  creator {
+                    id
+                  }
                   id
                 }
-                id
+                
+                }
+              }`,
+      variables: {
+        content: content,
+        id: userid
+      }
+    };
+
+    const childTweetRequest = {
+      query: `mutation MyMutation($creator2: ID , $creator1: [ID!] , $topic: ID , $content: String ) {
+                updateTweet(input: {filter: {id: $creator1}, set: {childtweets: {content: $content, owner: {id: $creator2}, likes: 0, creator: {id: $topic}}}}) {
+                  numUids
+                }
               }
-              
-              }
-            }`,
-    variables: {
-      content: content,
-      id: userid
-    }
-  };
- 
-   const request = await fetch("https://nameless-brook-560043.eu-central-1.aws.cloud.dgraph.io/graphql", {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(requestBody),
-  })
+              `,
+      variables: {
+        content: content,
+        topic: topic ?? "",
+        creator1: userid,
+        creator2 : userid
+      }
+    };
+
+    const request = await fetch("https://nameless-brook-560043.eu-central-1.aws.cloud.dgraph.io/graphql", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(childTweet ? childTweetRequest : requestBody),
+    })
   return true
 }
 

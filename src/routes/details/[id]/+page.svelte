@@ -18,7 +18,7 @@
     <div class="container h-3/6 mx-auto flex">
 	
         <div class="w-1/4 p-10 space-y-10 text-center flex flex-col items-center">
-            <Send  userID={data.id} bind:reloadTweets={reloadTweets}/>
+            <Send childTweet={true}  userID={data.id} bind:reloadTweets={reloadTweets} topic={data.creator[0].id}/>
         </div>
       
         <div class="w-3/4 p-10 space-y-10 text-center flex flex-col items-center">

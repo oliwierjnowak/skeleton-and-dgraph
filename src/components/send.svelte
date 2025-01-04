@@ -4,14 +4,23 @@
 
 	export let userID: string;
     export let reloadTweets :() => Promise<void>; 
+    export let childTweet: boolean;
+    export let topic : string
     let posting :boolean = false
 	const handleUpload = async () => {
         posting = true
         await reloadTweets;
-        const request = await AddNewTweet(userID,content);
+        let request;
+        if(!childTweet){
+             request = await AddNewTweet(childTweet,userID,content,undefined);
+        }else{
+             request = await AddNewTweet(childTweet,userID,content,topic);
+        }
+       
         if(request){
             content = ''
         }
+        posting = false;
         await reloadTweets();
        
       
