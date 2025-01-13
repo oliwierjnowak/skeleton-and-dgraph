@@ -1,7 +1,7 @@
 <script lang="ts" >
 	import type {FrontPageState, user, tweet } from '../graphql/fetchData';
 	import  {DeleteTweet } from '../graphql/fetchData';
-	
+	import { goto } from '$app/navigation';
 	export let state: tweet;
 //	let tweets  = state.tweetData;
 	//console.log(tweets);
@@ -12,7 +12,7 @@
 		//var tweets = tweets.filter(x => x.id != tweet)
 		//console.log(tweet)
 		await DeleteTweet(tweet);
-		
+		goto('/');
 	}
 	
 </script>	
@@ -20,18 +20,17 @@
 
 
 
-
 	
 <div class="card p-4 card-hover p-4 w-80">
 	<div >
-		<div style="background-color: {state.creator[0].color.toLowerCase()};" class="{"bg-"+state.creator[0].color+"-500"} rounded p-4 w-full content-center">
+		<div  class="{ "bg-"+state.creator[0].color.toLowerCase()+"-400"} rounded p-4 w-full content-center">
 			<h2>{state.content}</h2>
 		  </div>
 	
 		<!-- svelte-ignore a11y-label-has-associated-control -->
 		<label class="label">
-			<span> {state.creator[0].name}</span>
-			<span> {state.creator[0].email}</span>
+		
+			<span> <p> {state.creator[0].email } </p></span>
 			<span> {state.likes}</span>
 		</label>
 			

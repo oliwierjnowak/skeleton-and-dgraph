@@ -70,9 +70,9 @@
 	</div>
   
 	<div class=" columns-lg flex-4 p-10 space-y-10 text-center flex flex-col items-center">
-		<div class="bg-blue-900 rounded p-4 w-full md:w-2/3 lg:w-4/6 xl:w-4/6">
-			<h1> all posts</h1>
-		</div>
+		
+		
+	
 
 		{#if loaded == true}
 			{#each FrontState.queryTweet as tweet }
@@ -95,6 +95,8 @@
 	</div>
   
 	<div class="columns-sm flex-1  p-4 space-y-10 text-center items-center">
+		
+		<h3>Choose topic to share your opinion about or select tweet to view comments</h3>
 	  <!-- Content for the third container -->
 		{#if loaded == true}
 			<TweeterUsers bind:data={topics} bind:selectedTopicID={selectedID}/>

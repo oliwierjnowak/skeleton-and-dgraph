@@ -84,7 +84,7 @@ export const fetchTopicData = async (): Promise<user[]> => {
 						color
 						email
 						}
-						childtweets {
+						childtweets (filter: {has: content, and: {has: owner, and: {has: creator}}})  {
 						id
 						likes
 						content
@@ -166,8 +166,8 @@ export async function AddNewTweet(childTweet : boolean,userid: string, content:s
 export async function DeleteTweet(tweet: string): Promise<boolean>{
   const removeNode = {
     query: `
-      mutation MyMutation($tweetID: [ID!]) {
-  deleteTweet(filter: {id: $tweetID}) {
+mutation MyMutation {
+  deleteTweet(filter: {id: "${tweet}"}) {
     msg
     numUids
   }
@@ -177,7 +177,7 @@ export async function DeleteTweet(tweet: string): Promise<boolean>{
     `,
     variables: {
        
-      tweetId: [tweet] 
+    
     }
   };
   console.log(tweet + "   to be deleted")
