@@ -4,7 +4,7 @@
     import Send from "../../../components/send.svelte";
     export let data : ownerTweet;
 
-
+    console.log(data)
 
     export let reloadTweets = async () => {
         data = await loadOwner(data.id)

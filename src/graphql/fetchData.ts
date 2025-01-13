@@ -147,11 +147,11 @@ export async function AddNewTweet(childTweet : boolean,userid: string, content:s
       variables: {
         content: content,
         topic: topic ?? "",
-        creator1: userid,
+        creator1: [userid],
         creator2 : userid
       }
     };
-
+    console.log("topic  " + topic)
     const request = await fetch("https://nameless-brook-560043.eu-central-1.aws.cloud.dgraph.io/graphql", {
       method: 'POST',
       headers: {
@@ -163,53 +163,34 @@ export async function AddNewTweet(childTweet : boolean,userid: string, content:s
 }
 
 
-export async function DeleteTweet(user:string,tweet: string): Promise<boolean>{
+export async function DeleteTweet(tweet: string): Promise<boolean>{
   const removeNode = {
     query: `
-      mutation MyMutation($userId: [ID!], $tweetId: ID!) {
-        updateUser(input: {filter: {id: $userId}, remove: {tweets: {id: $tweetId}}}) {
-          numUids
-        }
-      }
+      mutation MyMutation($tweetID: [ID!]) {
+  deleteTweet(filter: {id: $tweetID}) {
+    msg
+    numUids
+  }
+}
+
+
     `,
     variables: {
-      userId: user, 
-      tweetId: tweet 
+       
+      tweetId: [tweet] 
     }
   };
-  
-  const requestBody = {
-    query: `mutation MyMutation($id: [ID!]) {
-      deleteTweet(filter: {id: $id}) {
-        msg
-        numUids
-        tweet {
-          id
-          likes
-          content
-        }
-      }
-    }`,
-    variables: {
-      id: tweet
-      }
-    
-  };
+  console.log(tweet + "   to be deleted")
+
   const requestNodeChild = await fetch("https://nameless-brook-560043.eu-central-1.aws.cloud.dgraph.io/graphql", {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(removeNode),
-  })
+  }) 
 
-  const request = await fetch("https://nameless-brook-560043.eu-central-1.aws.cloud.dgraph.io/graphql", {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(requestBody),
-  })
+  console.log(requestNodeChild);
   return true
 }
 
