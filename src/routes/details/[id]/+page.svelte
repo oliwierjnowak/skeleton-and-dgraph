@@ -27,7 +27,8 @@
                 creator : data.creator,
                 id : data.id,
                 likes : data.likes,
-                comments :((data.childtweetsAggregate?.count ?? 0) + "")
+                comments :( "selected"),
+                childtweetsAggregate: {count : data.childtweetsAggregate?.count ?? 0} 
             }}  />
         
     
@@ -39,7 +40,8 @@
                     creator : data.creator,
                     id : tweet.id,
                     likes : tweet.likes,
-                    comments : ((tweet.childtweetsAggregate?.count ?? 0) + "")
+                    comments : ((tweet.childtweetsAggregate?.count ?? 0) + ""),
+                    childtweetsAggregate: {count : data.childtweetsAggregate?.count ?? 0} 
 
                 } }  />
             

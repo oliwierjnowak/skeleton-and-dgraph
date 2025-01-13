@@ -26,7 +26,7 @@
 		
 		try {
 			FrontState = await fetchData() ;
-
+			console.log(FrontState)
 			topics = await fetchTopicData();
 			
 		//	let users = userData.tweetDatweets		//	usernames = users[0].map(x => x.name)
@@ -64,7 +64,7 @@
 	<div class="columns-sm  flex-1 p-10 space-y-10 text-center items-center">
 		{#if loaded == true && selectedID} <Send childTweet={false} userID={selectedID} bind:reloadTweets={reloadTweets} topic={""}/>
 		{:else}
-			<span>no user selected</span>
+			<span>no topic selected</span>
 		{/if}
 
 	</div>

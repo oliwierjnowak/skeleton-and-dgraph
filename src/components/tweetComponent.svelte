@@ -2,9 +2,11 @@
 	import type {FrontPageState, user, tweet } from '../graphql/fetchData';
 	import  {DeleteTweet } from '../graphql/fetchData';
 	import { goto } from '$app/navigation';
+	import { comment } from 'postcss';
 	export let state: tweet;
 //	let tweets  = state.tweetData;
 	//console.log(tweets);
+	
 	async function deleteTweet(tweet: string) {
 
 		
@@ -21,9 +23,9 @@
 
 
 	
-<div class="card p-4 card-hover p-4 w-80">
+<div class="card p-4 card-hover  p-4 w-80">
 	<div >
-		<div  class="{ "bg-"+state.creator[0].color.toLowerCase()+"-400"} rounded p-4 w-full content-center">
+		<div  class="{ "bg-"+state.creator[0].color+"-400"} rounded p-4 w-full content-center">
 			<h2>{state.content}</h2>
 		  </div>
 	
@@ -31,7 +33,7 @@
 		<label class="label">
 		
 			<span> <p> {state.creator[0].email } </p></span>
-			<span> {state.likes}</span>
+			<span>{ state.comments != "selected" ? "comments: " +state.comments : "selected"}</span>
 		</label>
 			
 				<button type="button"  class="btn-icon  bg-error-900  absolute top-[-10px] right-[-10px]" on:click={() => deleteTweet(state.id)} >

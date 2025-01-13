@@ -46,11 +46,11 @@
     <form on:submit|preventDefault={handleUpload}>
 
         <label for="content" class="label">
-            <span>Send tweet</span>
+           
             <textarea   bind:value={content} id="content" class="textarea" rows="4" placeholder="new tweet" />
         </label>
         
-    <button type="submit">Upload</button>
+    <button type="submit"><h3>Upload tweet</h3></button>
     </form>
 {/if}
 

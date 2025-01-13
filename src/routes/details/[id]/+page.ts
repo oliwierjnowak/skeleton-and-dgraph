@@ -1,5 +1,5 @@
 import { loadOwner, type FrontPageState , type user} from '../../../graphql/fetchData';
-export async function load({ params }) {
+export async function load({ params  } : any) {
 
 	const data = await loadOwner(params.id)
 	return data;

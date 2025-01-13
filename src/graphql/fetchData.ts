@@ -13,6 +13,9 @@ query MyQuery {
       email
       color
     }
+    childtweetsAggregate(filter: {has: content, and: {has: owner}}) {
+      count
+    }  
   }
 }
 `;
@@ -35,8 +38,12 @@ export type tweet = {
   likes : number,
   content: string,
   id: string,
-  comments: string,
+  comments: string ,
   creator : [user] 
+  childtweetsAggregate : {
+    count : number
+  }
+ 
 }
 export type user = {
   id : string,
@@ -49,6 +56,8 @@ export const fetchData = async (): Promise<FrontPageState> => {
   try {
     // Execute the GraphQL query using the request function
     const data = await request<FrontPageState>("https://nameless-brook-560043.eu-central-1.aws.cloud.dgraph.io/graphql", query);
+
+    data.queryTweet.map(x => x.comments = x.childtweetsAggregate.count + "")
     return data;
   } catch (error) {
     // Handle errors
@@ -88,13 +97,13 @@ export const fetchTopicData = async (): Promise<user[]> => {
 						id
 						likes
 						content
-						childtweetsAggregate {
-							count
-							}	
+						childtweetsAggregate(filter: {has: content, and: {has: owner}}) {
+      count
+    }
 						}
-						childtweetsAggregate {
-						count
-						}
+					childtweetsAggregate(filter: {has: content, and: {has: owner}}) {
+      count
+    }
 					}
 					}
 					`

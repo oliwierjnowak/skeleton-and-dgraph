@@ -14,9 +14,11 @@
 
 <ListBox >
     {#each data as user }
+        
 
-        <ListBoxItem bind:group={selectedTopicID} name="medium" on:change={showSelected}  value={user.id}>{user.name}</ListBoxItem>
+            <ListBoxItem bind:group={selectedTopicID} name="medium" on:change={showSelected} class="bg-{user.color}-300"  value={user.id}>{user.name} </ListBoxItem>
 
+        
     {/each}	
 
   </ListBox>
