@@ -8,7 +8,7 @@
     
    // let users = data.map( x=> x.creator)
     function showSelected(){
-		console.log(selectedTopicID)
+		
 	}
 </script>
 

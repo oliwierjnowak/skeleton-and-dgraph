@@ -26,7 +26,7 @@
 		
 		try {
 			FrontState = await fetchData() ;
-			console.log(FrontState)
+		
 			topics = await fetchTopicData();
 			
 		//	let users = userData.tweetDatweets		//	usernames = users[0].map(x => x.name)
@@ -43,7 +43,7 @@
 	 
 		 state = FrontState
 		loaded = true;  
-		console.log('hello')
+	
 	}
 
 	let user : user = {

@@ -108,8 +108,7 @@ export const fetchTopicData = async (): Promise<user[]> => {
 					}
 					`
 	const data = await request<specificTweet>("https://nameless-brook-560043.eu-central-1.aws.cloud.dgraph.io/graphql", query);
-	//console.log(data.getTweet.childtweets[0].childtweetsAggregate.count)
-  console.log(data.getTweet)
+
 	return data.getTweet;
 }
 export type specificTweet = {
@@ -160,7 +159,7 @@ export async function AddNewTweet(childTweet : boolean,userid: string, content:s
         creator2 : userid
       }
     };
-    console.log("topic  " + topic)
+   
     const request = await fetch("https://nameless-brook-560043.eu-central-1.aws.cloud.dgraph.io/graphql", {
       method: 'POST',
       headers: {
@@ -198,8 +197,6 @@ mutation MyMutation {
     },
     body: JSON.stringify(removeNode),
   }) 
-
-  console.log(requestNodeChild);
   return true
 }
 
